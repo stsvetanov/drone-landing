@@ -19,17 +19,15 @@ image_points = np.array([
 
 # 3D model points.
 model_points = np.array([
-                            (0.0, 0.0, 0.0),     # Center
-                            (-170, -170, 0),     # Left up
+                            (0.0, 0.0, 0.0),   # Center
+                            (-170, -170, 0),   # Left up
                             (170, -170, 0),    # Right up
                             (-170, 170, 0),    # Left down
-                            (170, 170, 0),        # Right down
+                            (170, 170, 0),     # Right down
 
                         ])
 
-
 # Camera internals
-
 focal_length = size[1]
 center = (size[1]/2, size[0]/2)
 camera_matrix = np.array(
@@ -49,7 +47,6 @@ print("Translation Vector:\n {0}".format(translation_vector))
 
 # Project a 3D point (0, 0, 1000.0) onto the image plane.
 # We use this to draw a line sticking out of the nose
-
 
 (nose_end_point2D, jacobian) = cv2.projectPoints(np.array([(0.0, 0.0, 1000.0)]), rotation_vector, translation_vector, camera_matrix, dist_coeffs)
 
