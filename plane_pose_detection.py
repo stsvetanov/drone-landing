@@ -3,28 +3,31 @@
 
 import cv2
 import numpy as np
+path = "images/drone_station2.png"
+from preprossesing.count_white_dots import find_coords
 
 # Read Image
-im = cv2.imread("plane.jpg");
+im = cv2.imread(path);
 size = im.shape
 
 #2D image points. If you change the image, you need to change vector
-image_points = np.array([
-                            (222, 570),     # Center
-                            (250, 530),     # Left up
-                            (116, 540),     # Right up
-                            (324, 600),     # Left down
-                            (190, 616),     # Right down
-                        ], dtype="double")
+# image_points = np.array([
+#                             (222, 570),     # Center
+#                             (250, 530),     # Left up
+#                             (116, 540),     # Right up
+#                             (324, 600),     # Left down
+#                             (190, 616),     # Right down
+#                         ], dtype="double")
+coordinates = [(262, 304), (64, 103), (453, 103), (61, 510), (468, 502)]
+image_points = np.array(coordinates, dtype= "double")
 
 # 3D model points.
 model_points = np.array([
-                            (0.0, 0.0, 0.0),   # Center
-                            (-170, -170, 0),   # Left up
-                            (170, -170, 0),    # Right up
-                            (-170, 170, 0),    # Left down
-                            (170, 170, 0),     # Right down
-
+                            (0.0, 0.0, 0.0),  # Center
+                            (-150, -150, 0),  # Left up
+                            (150, -150, 0),  # Right up
+                            (-150, 150, 0),    # Left down
+                            (150, 150, 0),     # Right down
                         ])
 
 # Camera internals

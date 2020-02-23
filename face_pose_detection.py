@@ -14,7 +14,7 @@ image_points = np.array([
                             (539, 372),     # Nose tip
                             (430, 619),     # Chin
                             (304, 245),     # Left eye left corner
-                            (590, 290),     # Right eye right corne
+                            (590, 290),     # Right eye right corner
                             (374, 481),     # Left Mouth corner
                             (517, 490)      # Right mouth corner
                         ], dtype="double")
