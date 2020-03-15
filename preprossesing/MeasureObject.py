@@ -2,6 +2,7 @@ import cv2
 from scipy.spatial import distance as dist
 
 scale = 0.23
+cam_id = 0
 
 def midpoint(ptA, ptB):
     return (int((ptA[0] + ptB[0]) * 0.5), int((ptA[1] + ptB[1]) * 0.5))
@@ -27,17 +28,11 @@ def track_object(thresh_image):
             # cv2.line(frame, tuple(approx[0][0]), tuple(approx[1][0]), (0, 255, 100), 4)
             if len(approx) == 4:
                 for i in range(-3, 1):
-                    cv2.line(frame, tuple(approx[i - 1][0]), tuple(approx[i][0]), (0, 255, 100), 4)
+                    cv2.line(frame, tuple(approx[i - 1][0]), tuple(approx[i][0]), (0, 0, 255), 4)
                     size = dist.euclidean(tuple(approx[i - 1][0]), tuple(approx[i][0]))
                     position = midpoint(tuple(approx[i - 1][0]), tuple(approx[i][0]))
                     cv2.putText(frame, f"{round(size * scale, 1)}", position, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3, cv2.LINE_AA)
 
-
-            # print(approx)
-            # edged = cv2.Canny(cnt, 50, 100)
-            # hull = cv2.convexHull(cnt)
-            # print(hull)
-            # print(cnt[0])
 
             # calculate moments for each contour
             M = cv2.moments(cnt)
@@ -57,7 +52,7 @@ def track_object(thresh_image):
 
 
 # capture frames from a camera with device index=0
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(cam_id)
 
 if not cap.isOpened():
     print("Can`t open the video file!\n");
@@ -71,7 +66,7 @@ while cap.isOpened():
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (15, 15), 0)
-    thresh = cv2.threshold(blurred, 170, 255, cv2.THRESH_BINARY)[1]
+    thresh = cv2.threshold(blurred, 120, 255, cv2.THRESH_BINARY)[1]
     track_object(thresh)
 
     # Display the frame
