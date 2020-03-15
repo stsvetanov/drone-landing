@@ -19,7 +19,7 @@ size = im.shape
 #                             (190, 616),     # Right down
 #                         ], dtype="double")
 coordinates = [(262, 304), (64, 103), (453, 103), (61, 510), (468, 502)]
-image_points = np.array(coordinates, dtype= "double")
+image_points = np.array(coordinates, dtype="double")
 
 # 3D model points.
 model_points = np.array([
@@ -36,7 +36,7 @@ center = (size[1]/2, size[0]/2)
 camera_matrix = np.array(
                          [[focal_length, 0, center[0]],
                          [0, focal_length, center[1]],
-                         [0, 0, 1]], dtype = "double"
+                         [0, 0, 1]], dtype="double"
                          )
 
 print("Camera Matrix :\n {0}".format(camera_matrix))
