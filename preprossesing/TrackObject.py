@@ -31,7 +31,7 @@ def track_object(thresh_image):
 
 
 # capture frames from a camera with device index=0
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 if not cap.isOpened():
     print("Can`t open the video file!\n");
@@ -45,7 +45,7 @@ while cap.isOpened():
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (15, 15), 0)
-    thresh = cv2.threshold(blurred, 150, 255, cv2.THRESH_BINARY)[1]
+    thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
     track_object(thresh)
 
     # Display the frame
