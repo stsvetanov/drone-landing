@@ -36,7 +36,7 @@ for cnt in cnts:
         if len(approx) == 4:
             sizes = []
             for i in range(-3, 1):
-                # cv2.line(img, tuple(approx[i - 1][0]), tuple(approx[i][0]), (0, 255, 100), 4)
+                cv2.line(img, tuple(approx[i - 1][0]), tuple(approx[i][0]), (0, 255, 100), 4)
                 size = dist.euclidean(tuple(approx[i - 1][0]), tuple(approx[i][0]))
                 # position = midpoint(tuple(approx[i - 1][0]), tuple(approx[i][0]))
                 # cv2.putText(img, f"{round(size, 1)}", position, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3, cv2.LINE_AA)
@@ -66,10 +66,15 @@ cropped = new_image[topx:bottomx+1, topy:bottomy+1]
         #
         # coordinates.append((cX, cY))
 
+# Rotation
+# rows, cols = cropped.shape
+# M = cv2.getRotationMatrix2D((cols/2, rows/2), 15, 1)
+# dst = cv2.warpAffine(cropped, M, (cols,rows))
 
 text = pytesseract.image_to_string(cropped, config='--psm 11')
 print("Detected Number is:", text)
 
 cv2.imshow('image', cropped)
+# cv2.imwrite('dst.jpg', dst)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
