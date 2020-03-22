@@ -13,6 +13,17 @@ def midpoint(ptA, ptB):
 
 # Load an color image in color
 img = cv2.imread('../images/plate.jpg', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_2.jpg', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_3.jpg', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_4.jpg', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_5.jfif', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_6.jpg', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_7.png', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_8.jpg', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_9.png', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_10.jpg', cv2.IMREAD_COLOR)
+#img = cv2.imread('../images/plate_11.jfif', cv2.IMREAD_COLOR)
+
 # Convert to grayscale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 

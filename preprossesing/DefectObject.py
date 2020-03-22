@@ -7,20 +7,27 @@ import cv2
 from scipy.spatial import distance as dist
 
 scale = 0.182
-cam_id = 1
+cam_id = 0
+min_length = 36
+max_length = 39
+
 
 def midpoint(ptA, ptB):
     return (int((ptA[0] + ptB[0]) * 0.5), int((ptA[1] + ptB[1]) * 0.5))
 
 
-def track_object(thresh_image):
+def check_detail(thresh_image):
     # findcontours
     cnts = cv2.findContours(thresh_image, cv2.RETR_TREE,
                             cv2.CHAIN_APPROX_SIMPLE)[0]
 
     # filter by area
     s1 = 20
-    defect = False
+    check_pass = True
+    if not cnts:
+        print("No detail detected")
+        return False
+    print(len(cnts))
     for cnt in cnts:
         if s1 < cv2.contourArea(cnt):
             # cv2.drawContours(frame, [cnt], 0, (0, 255, 0), 6)
@@ -31,28 +38,31 @@ def track_object(thresh_image):
             # cv2.line(frame, tuple(approx[0][0]), tuple(approx[1][0]), (0, 255, 100), 4)
             if len(approx) == 2:
                 for i in range(-1, 1):
-                    cv2.line(frame, tuple(approx[i - 1][0]), tuple(approx[i][0]), (0, 255, 0), 4)
-                    size_pixels = dist.euclidean(tuple(approx[i - 1][0]), tuple(approx[i][0]))
+                    a = tuple(approx[i - 1][0])
+                    b = tuple(approx[i][0])
+                    cv2.line(frame, a, b, (0, 255, 0), 4)
+                    size_pixels = dist.euclidean(a, b)
                     size_mm = size_pixels * scale
-                    position = midpoint(tuple(approx[i - 1][0]), tuple(approx[i][0]))
+                    position = midpoint(a, b)
                     cv2.putText(frame, f"{round(size_mm, 1)}", position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3, cv2.LINE_AA)
-            else:
-                return True
+                if not min_length < size_mm < max_length:
+                    check_pass = False
 
-            # calculate moments for each contour
-            M = cv2.moments(cnt)
+                # calculate moments for each contour
+                M = cv2.moments(cnt)
 
-            # calculate x,y coordinate of center
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
+                # calculate x,y coordinate of center
+                cX = int(M["m10"] / M["m00"])
+                cY = int(M["m01"] / M["m00"])
 
-            # Да се добавят останалите услувия
-            cv2.circle(frame, (cX, cY), 4, (0, 255, 0), -1)
+                # Да се добавят останалите услувия
+                cv2.circle(frame, (cX, cY), 4, (0, 255, 0), -1)
 
-        if 32 < size_mm < 38:
-            defect = True
-
-    return defect
+                cross_line = abs(dist.euclidean((cX, cY), a) + dist.euclidean((cX, cY), b) - size_pixels)
+                print(cross_line)
+                if cross_line > 3:
+                    check_pass = False
+    return check_pass
 
 
 # capture frames from a camera with device index=0
@@ -66,15 +76,18 @@ if not cap.isOpened():
 # loop runs if capturing has been initialized
 while cap.isOpened():
     # Да се сихнронизира с вход от потребителя.
-    # continue_key = input("Put next detail")
+    continue_key = input("Put next detail")
 
     # reads frame from a camera
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (15, 15), 0)
-    thresh = cv2.threshold(blurred, 160, 255, cv2.THRESH_BINARY)[1]
-    defect = track_object(thresh)
-    print(f"Defect detail!: {defect}")
+    thresh = cv2.threshold(blurred, 140, 255, cv2.THRESH_BINARY)[1]
+    check = check_detail(thresh)
+    if check:
+        print("The detail is NOT defective!")
+    else:
+        print("The detail IS defective!")
 
     # Display the frame
     cv2.imshow('Camera', frame)

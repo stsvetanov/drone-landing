@@ -13,10 +13,11 @@ def midpoint(ptA, ptB):
 
 # Load an color image in color
 img = cv2.imread('../images/plate2.jpg', cv2.IMREAD_COLOR)
+
 # Convert to grayscale
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 # blurred = cv2.GaussianBlur(gray, (3, 3), 0)
-ret, thresh = cv2.threshold(gray, 160, 255, cv2.THRESH_BINARY_INV)
+ret, thresh = cv2.threshold(gray, 120, 255, cv2.THRESH_BINARY_INV)
 
 # edged = cv2.Canny(thresh, 30, 200) #Perform Edge detection
 cnts = cv2.findContours(thresh, cv2.RETR_TREE,
