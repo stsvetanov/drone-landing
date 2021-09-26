@@ -1,6 +1,5 @@
 import cv2
 
-
 def track_object(thresh_image):
     # findcontours
     cnts = cv2.findContours(thresh_image, cv2.RETR_LIST,
@@ -31,7 +30,7 @@ def track_object(thresh_image):
 
 
 # capture frames from a camera with device index=0
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
     print("Can`t open the video file!\n");

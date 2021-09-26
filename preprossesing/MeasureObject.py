@@ -2,7 +2,7 @@ import cv2
 from scipy.spatial import distance as dist
 
 scale = 0.182
-cam_id = 1
+cam_id = 0
 
 def midpoint(ptA, ptB):
     return (int((ptA[0] + ptB[0]) * 0.5), int((ptA[1] + ptB[1]) * 0.5))
@@ -66,11 +66,12 @@ while cap.isOpened():
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (15, 15), 0)
-    thresh = cv2.threshold(blurred, 182, 255, cv2.THRESH_BINARY)[1]
+    thresh = cv2.threshold(blurred, 150, 255, cv2.THRESH_BINARY)[1]
     track_object(thresh)
 
     # Display the frame
-    cv2.imshow('Camera', frame)
+    cv2.imshow('Camera1', frame)
+    cv2.imshow('Camera2', thresh)
 
     # Wait for 25ms
     if cv2.waitKey(1) & 0xFF == ord('q'):
