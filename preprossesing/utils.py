@@ -1,24 +1,37 @@
 import cv2
 import numpy as np
 
+count = []
+counter = 0
+
 def find_blobs(frame):
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gray = cv2.bitwise_not(gray)
-    blurred = cv2.GaussianBlur(gray, (15, 15), 0)
+    # gray = cv2.bitwise_not(gray)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
     thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
 
-    cnts = cv2.findContours(thresh, cv2.RETR_LIST,
+    contours = cv2.findContours(thresh, cv2.RETR_LIST,
                             cv2.CHAIN_APPROX_SIMPLE)[0]
 
-    xcnts = []
     coordinates = []
     s1 = 20
-    for cnt in cnts:
-        if s1 < cv2.contourArea(cnt):
-            xcnts.append(cnt)
+    # print(cnts)
 
-            M = cv2.moments(cnt)
+    global counter
+    global count
+
+    count.append(len(contours))
+
+    if counter == 10:
+        counter = 0
+        print(count)
+    else:
+        counter += 1
+
+    for contour in contours:
+        if s1 < cv2.contourArea(contour):
+            M = cv2.moments(contour)
 
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
@@ -27,11 +40,11 @@ def find_blobs(frame):
 
             coordinates.append((cX, cY))
 
-    print("\nDots number: {}".format(len(xcnts)))
-    print(f"coordinates: {coordinates}")
+    # print("\nDots number: {}".format(len(xcnts)))
+    # print(f"coordinates: {coordinates}")
     return coordinates
 
-def everything(coordinates, im):
+def calculate_positions(coordinates, im):
     size = im.shape
 
     image_points = np.array(coordinates, dtype="double")

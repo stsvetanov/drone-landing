@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from utils import find_blobs, everything
+from utils import find_blobs, calculate_positions
 
 capture = cv2.VideoCapture(0)
 
@@ -9,10 +9,11 @@ if not capture.isOpened():
     exit()
 
 while capture.isOpened():
-    print(f'FPS: {cv2.CAP_PROP_FPS}')
+    # print(f'FPS: {cv2.CAP_PROP_FPS}')
     ret, frame = capture.read()
     coordinates = find_blobs(frame)
-    # everything(coordinates, frame)
+    # if len(coordinates) == 5:
+    #     calculate_positions(coordinates, frame)
 
     cv2.imshow('Camera', frame)
 
